@@ -15,7 +15,7 @@ export class AuthService
         if(!response)
             throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
                 
-        const token = this._createToken(user)
+        const token = this.createToken(user)
 
         return {
             accessToken: token
@@ -25,14 +25,14 @@ export class AuthService
     async signUp(user: AuthSignInDTO) 
     {
         const isUser = await this.authRepository.findUserByEmail(user.email)
-        
+        console.log(isUser)
         if(isUser) 
             throw new HttpException("Conflict", HttpStatus.CONFLICT)
 
         return await this.authRepository.createUser(user)   
     }
 
-    private _createToken(payload: object | string | Buffer)
+    createToken(payload: object | string | Buffer)
     {
         const options = {
             expiresIn: "7 days",
@@ -43,4 +43,12 @@ export class AuthService
         }
         return this.jwtService.sign(payload, options)
     }
+
+    verifyToken(token: string)
+    {
+        const secret = process.env.JWT_SECRET as string
+        const tokenVerified = this.jwtService.verify(token, { secret })
+        
+        return tokenVerified
+    }   
 }
