@@ -1,14 +1,13 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "src/Services/auth.service";
-import { AuthRouteEnum } from "./Routers/auth.route";
 import { AuthSignInDTO } from "src/DTO/Auth/authSignIn.dto";
 
-@Controller(AuthRouteEnum.base)
+@Controller("auth")
 export class AuthController 
 {
     constructor(private readonly authService: AuthService) {}
 
-    @Post(AuthRouteEnum.signIn)
+    @Post("signIn")
     async signIn(@Body() body: AuthSignInDTO) 
     {   
         const response = this.authService.signIn(body)
@@ -16,11 +15,17 @@ export class AuthController
         return response
     }
 
-    @Post(AuthRouteEnum.signUp)
+    @Post("signUp")
     async signUp(@Body() body: AuthSignInDTO) 
     {   
-        const response = this.authService.signUp(body)
-
-        return response
+        try 
+        {
+            const response = this.authService.signUp(body)
+            return response
+        }
+        catch(err) 
+        {
+            return err
+        }
     }
 }
