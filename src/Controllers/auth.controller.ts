@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "src/Services/auth.service";
 import { AuthSignInDTO } from "src/DTO/Auth/authSignIn.dto";
+import { AuthSignUpDTO } from "src/DTO/auth.dto";
 
 @Controller("auth")
 export class AuthController 
@@ -16,8 +17,9 @@ export class AuthController
     }
 
     @Post("signUp")
-    async signUp(@Body() body: AuthSignInDTO) 
+    async signUp(@Body() body: AuthSignUpDTO) 
     {   
+        console.log(body)
         try 
         {
             const response = this.authService.signUp(body)

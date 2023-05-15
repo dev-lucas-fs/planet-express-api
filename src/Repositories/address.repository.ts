@@ -47,7 +47,8 @@ export class AddressRepository
                 state: true,
                 number: true,
                 neighborhood: true,
-                addressDetail: true
+                addressDetail: true,
+                name: true
             }
         })
     }

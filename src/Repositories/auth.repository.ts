@@ -1,6 +1,7 @@
 import { PrismaService } from "src/Services/prisma.service";
 import { AuthSignInDTO } from "src/DTO/Auth/authSignIn.dto";
 import { Injectable } from "@nestjs/common";
+import { AuthSignUpDTO } from "src/DTO/auth.dto";
 
 @Injectable()
 export class AuthRepository
@@ -12,8 +13,7 @@ export class AuthRepository
     { 
         return this.prisma.user.findFirst({
             where: {
-                email: user.email,
-                password: user.password
+                email: user.email
             }
         })
     }
@@ -27,7 +27,7 @@ export class AuthRepository
         })
     }
 
-    createUser(user: AuthSignInDTO) 
+    createUser(user: AuthSignUpDTO) 
     {
         return this.prisma.user.create({
             data: user

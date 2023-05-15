@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { AuthSignInDTO } from "src/DTO/Auth/authSignIn.dto";
+import { AuthSignUpDTO } from "src/DTO/auth.dto";
 import { AuthRepository } from "src/Repositories/auth.repository";
 
 @Injectable()
@@ -12,7 +13,7 @@ export class AuthService
     {
         const response = await this.authRepository.findUserByCredentials(user)
         
-        if(!response)
+        if(!response || response.password !== user.password)
             throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
                 
         const token = this.createToken(user)
@@ -22,10 +23,10 @@ export class AuthService
         }
     }
 
-    async signUp(user: AuthSignInDTO) 
+    async signUp(user: AuthSignUpDTO) 
     {
         const isUser = await this.authRepository.findUserByEmail(user.email)
-        console.log(isUser)
+
         if(isUser) 
             throw new HttpException("Conflict", HttpStatus.CONFLICT)
 
